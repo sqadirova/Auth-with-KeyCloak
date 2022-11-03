@@ -1,0 +1,19 @@
+linters:
+  disable-all: false
+  enable:
+    - errcheck
+    - gosimple
+    - govet
+    - ineffassign
+    - staticcheck
+    - unused
+    - bodyclose
+    - decorder
+    - gosec
+    - unparam
+    - nakedret
+    - wsl
+    - lll
+linters-settings:
+  lll:
+    line-length: 100

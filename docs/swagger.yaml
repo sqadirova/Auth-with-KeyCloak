@@ -1,0 +1,76 @@
+basePath: /api/v1
+definitions:
+  auth.SignInReq:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  auth.SignInResp:
+    properties:
+      token:
+        type: string
+    required:
+    - token
+    type: object
+  response.Response:
+    properties:
+      key:
+        type: string
+      message:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Inventory Management API
+  version: "2.0"
+paths:
+  /auth/sign-in:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Sign In Req
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/auth.SignInReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.SignInResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Sign in the user to system.
+      tags:
+      - auth
+schemes:
+- http
+swagger: "2.0"
