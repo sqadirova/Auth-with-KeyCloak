@@ -52,13 +52,13 @@ func VerifyToken(accessToken string) (bool, string, error) {
 	return true, string(jwtToken), nil
 }
 
-func GetUserInfoFromToken(accessToken string) (*gocloak.UserInfo, error) {
+func GetUserInfoFromToken(token string) (*gocloak.UserInfo, error) {
 	// extract Bearer token
-	token := ExtractBearerToken(accessToken)
-
-	if token == "" {
-		return nil, errors.New("Bearer Token missing")
-	}
+	//token := ExtractBearerToken(accessToken)
+	//
+	//if token == "" {
+	//	return nil, errors.New("Bearer Token missing")
+	//}
 
 	//// call Keycloak API to verify the access token
 	result, err := newKeyCloak.Gocloak.RetrospectToken(context.Background(), token, newKeyCloak.ClientId, newKeyCloak.ClientSecret, newKeyCloak.Realm)

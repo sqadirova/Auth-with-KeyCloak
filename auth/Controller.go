@@ -4,8 +4,10 @@ import (
 	"AuthorizationWithKeycloak/keycloak"
 	"AuthorizationWithKeycloak/middleware"
 	"AuthorizationWithKeycloak/response"
+	"fmt"
 	"github.com/go-playground/validator"
 	fiber "github.com/gofiber/fiber/v2"
+	"log"
 	"net/http"
 )
 
@@ -17,11 +19,27 @@ func init() {
 	validate = validator.New()
 }
 
-func Get(ctx *fiber.Ctx) error {
-	//get userID from request header
+// GetUserMe godoc
+// @Summary Get user info by token in the request header.
+// @Description get user info from database by token in the request header
+// @Tags user
+// @Accept */*
+// @Produce json
+// @Param Authorization header string true "Bearer"
+// @Success 200 {object} UserMeResp
+// @Failure 400 {object} response.Response
+// @Failure 404 {object} response.Response
+// @Router /user/me [get]
+func GetUserMe(ctx *fiber.Ctx) error {
+	//get token from request header
 	isValid, token, err := middleware.VerifyToken(ctx.GetReqHeaders()["Authorization"])
+	if err != nil {
+		return err
+	}
 
-	if err != nil || isValid == false {
+	log.Println(token)
+
+	if err != nil || isValid != true {
 		return ctx.Status(http.StatusUnauthorized).
 			JSON(response.Response{
 				Key:     err.Error(),
@@ -29,17 +47,22 @@ func Get(ctx *fiber.Ctx) error {
 			})
 	}
 
-	userID, statusCode, err := NewAuthService.signOut(userId)
+	userInfo, err := middleware.GetUserInfoFromToken(token)
 
 	if err != nil {
-		return ctx.Status(statusCode).
-			JSON(response.Response{
-				Key:     err.Error(),
-				Message: response.GetErrorResponse(err.Error()),
-			})
+		return ctx.Status(http.StatusBadRequest).JSON(response.Response{
+			Key:     err.Error(),
+			Message: response.GetErrorResponse(err.Error()),
+		})
 	}
 
-	return ctx.Status(fiber.StatusOK).JSON(SignOutDTO{UserID: userID})
+	fmt.Println("userInfo: ", userInfo)
+
+	if err == response.ErrUnexpected {
+		return ctx.Status(500).JSON(response.GetResponseByKey("unexpected_error"))
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(nil)
 }
 
 // SignIn godoc
@@ -79,10 +102,7 @@ func SignIn(ctx *fiber.Ctx) error {
 
 	if err != nil {
 		return ctx.Status(statusCode).
-			JSON(response.Response{
-				Key:     err.Error(),
-				Message: response.GetErrorResponse(err.Error()),
-			})
+			JSON(err)
 	}
 
 	return ctx.Status(fiber.StatusOK).JSON(SignInResp{Token: token})

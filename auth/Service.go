@@ -3,6 +3,7 @@ package auth
 import (
 	"AuthorizationWithKeycloak/keycloak"
 	"context"
+	"fmt"
 	"net/http"
 )
 
@@ -55,6 +56,8 @@ func (auth *AuthService) signIn(userReqBody SignInReq) (string, int, error) {
 	if err != nil {
 		return "", http.StatusForbidden, err
 	}
+
+	fmt.Println("jwt.RefreshToken: ", jwt.RefreshToken)
 
 	return jwt.AccessToken, 0, nil
 }

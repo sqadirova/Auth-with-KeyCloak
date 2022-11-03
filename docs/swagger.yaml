@@ -1,5 +1,12 @@
 basePath: /api/v1
 definitions:
+  auth.RolesResp:
+    properties:
+      id:
+        type: string
+      role_type:
+        type: string
+    type: object
   auth.SignInReq:
     properties:
       password:
@@ -16,6 +23,19 @@ definitions:
         type: string
     required:
     - token
+    type: object
+  auth.UserMeResp:
+    properties:
+      firstname:
+        type: string
+      id:
+        type: string
+      lastname:
+        type: string
+      role:
+        $ref: '#/definitions/auth.RolesResp'
+      username:
+        type: string
     type: object
   response.Response:
     properties:
@@ -71,6 +91,35 @@ paths:
       summary: Sign in the user to system.
       tags:
       - auth
+  /user/me:
+    get:
+      consumes:
+      - '*/*'
+      description: get user info from database by token in the request header
+      parameters:
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.UserMeResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Get user info by token in the request header.
+      tags:
+      - user
 schemes:
 - http
 swagger: "2.0"

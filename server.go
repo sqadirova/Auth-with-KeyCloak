@@ -40,7 +40,7 @@ func main() {
 
 	routeService := routes.NewFiberService(v1)
 	routeService.Auth()
-	//routeService.User()
+	routeService.User()
 	//routeService.Role()
 	routeService.SwaggerRoute()
 

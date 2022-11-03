@@ -75,9 +75,64 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/user/me": {
+            "get": {
+                "description": "get user info from database by token in the request header",
+                "consumes": [
+                    "*/*"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Get user info by token in the request header.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/auth.UserMeResp"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "auth.RolesResp": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "role_type": {
+                    "type": "string"
+                }
+            }
+        },
         "auth.SignInReq": {
             "type": "object",
             "required": [
@@ -100,6 +155,26 @@ const docTemplate = `{
             ],
             "properties": {
                 "token": {
+                    "type": "string"
+                }
+            }
+        },
+        "auth.UserMeResp": {
+            "type": "object",
+            "properties": {
+                "firstname": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "lastname": {
+                    "type": "string"
+                },
+                "role": {
+                    "$ref": "#/definitions/auth.RolesResp"
+                },
+                "username": {
                     "type": "string"
                 }
             }

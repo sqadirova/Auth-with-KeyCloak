@@ -13,7 +13,7 @@ import (
 
 type Interface interface {
 	Auth()
-	//User()
+	User()
 	//Role()
 	SwaggerRoute()
 }
@@ -31,17 +31,16 @@ func (a *RouteService) Auth() {
 	//a.Server.Post("/auth/sign-out", auth.SignOut)
 }
 
-//func (a *RouteService) Role() {
-//	a.Server.Get("/user/roles", middleware.IsAuthorized(CONSTANTS.ADMIN), user.GetAllRoles)
-//	a.Server.Get("/user/roles/:id", middleware.IsAuthorized(CONSTANTS.ADMIN), user.GetOneRole)
-//}
-//
-//func (a *RouteService) User() {
-//	a.Server.Get("/users", middleware.IsAuthorized(CONSTANTS.ADMIN), user.GetAllUsers)
-//	a.Server.Post("/user", middleware.IsAuthorized(CONSTANTS.ADMIN), user.CreateUser)
-//	a.Server.Put("/user/:id", middleware.IsAuthorized(CONSTANTS.ADMIN), user.UpdateUser)
-//	a.Server.Get("/user/me", user.GetUserMe)
-//}
+//	func (a *RouteService) Role() {
+//		a.Server.Get("/user/roles", middleware.IsAuthorized(CONSTANTS.ADMIN), user.GetAllRoles)
+//		a.Server.Get("/user/roles/:id", middleware.IsAuthorized(CONSTANTS.ADMIN), user.GetOneRole)
+//	}
+func (a *RouteService) User() {
+	//a.Server.Get("/users", middleware.IsAuthorized(CONSTANTS.ADMIN), user.GetAllUsers)
+	//a.Server.Post("/user", middleware.IsAuthorized(CONSTANTS.ADMIN), user.CreateUser)
+	//a.Server.Put("/user/:id", middleware.IsAuthorized(CONSTANTS.ADMIN), user.UpdateUser)
+	a.Server.Get("/user/me", auth.GetUserMe)
+}
 
 func (r *RouteService) SwaggerRoute() {
 	docs.SwaggerInfo.Host = config.InfraConfiguration.Swagger.Host
