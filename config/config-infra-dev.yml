@@ -13,7 +13,7 @@ database:
 
 app:
   host: localhost
-  port: 8080
+  port: 8085
 
 jwt:
   secretKey: 9bd82804-970d-44d6-9bc9-f65079ab10dd

@@ -14,6 +14,6 @@ func NewKeycloak() *Keycloak {
 		Gocloak:      gocloak.NewClient("http://192.168.8.91:8080"),
 		ClientId:     "my-go-service",
 		ClientSecret: "An8Uofmv6DJDP63pNoYVouZsGLtEWqfF",
-		Realm:        "test_authorization",
+		Realm:        "test_im_authorization",
 	}
 }

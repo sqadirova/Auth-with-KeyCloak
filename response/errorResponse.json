@@ -17,12 +17,13 @@
   "no_role": "Role is not found",
   "user_created": "User successfully created",
   "cannot_delete" : "Cannot delete",
-  "access_token_expired": "Unauthorized! Access Token was expired!",
+  "token_expired": "Unauthorized! Token was expired!",
   "cannot_get_roles": "Cannot get roles",
   "unauthorized": "Unauthorized",
   "access_not_authorized": "Not authorized to access this route",
   "user_signed_out": "User already sign out",
   "already_logged_in": "You are already logged in to system.",
   "unknown error": "Unknown error occurred.",
-  "already_exists": "Already exists."
+  "already_exists": "Already exists.",
+  "bearer_token_missing": "Bearer Token missing"
 }

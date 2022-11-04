@@ -6,7 +6,8 @@ type SignInReq struct {
 }
 
 type SignInResp struct {
-	Token string `json:"token" validate:"required"`
+	AccessToken  string `json:"token" validate:"required"`
+	RefreshToken string `json:"refresh_token"`
 }
 
 type SignOutDTO struct {

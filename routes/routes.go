@@ -14,8 +14,8 @@ import (
 type Interface interface {
 	Auth()
 	User()
-	//Role()
 	SwaggerRoute()
+	//Role()
 }
 
 type RouteService struct {
@@ -28,7 +28,8 @@ func NewFiberService(server fiber.Router) Interface {
 
 func (a *RouteService) Auth() {
 	a.Server.Post("/auth/sign-in", auth.SignIn)
-	//a.Server.Post("/auth/sign-out", auth.SignOut)
+	a.Server.Post("/auth/testKeycloak", auth.TestKeycloak)
+	a.Server.Post("/auth/sign-out", auth.SignOut)
 }
 
 //	func (a *RouteService) Role() {

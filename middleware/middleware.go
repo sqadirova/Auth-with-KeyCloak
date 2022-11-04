@@ -3,10 +3,7 @@ package middleware
 import (
 	"AuthorizationWithKeycloak/keycloak"
 	"context"
-	"encoding/json"
 	"errors"
-	"fmt"
-	"github.com/Nerzal/gocloak/v12"
 	"log"
 	"strings"
 )
@@ -22,63 +19,31 @@ func VerifyToken(accessToken string) (bool, string, error) {
 	token := ExtractBearerToken(accessToken)
 
 	if token == "" {
-		return false, "", errors.New("Bearer Token missing")
+		return false, "", errors.New("bearer_token_missing")
 	}
 
-	//// call Keycloak API to verify the access token
+	// call Keycloak API to verify the access token
 	result, err := newKeyCloak.Gocloak.RetrospectToken(context.Background(), token, newKeyCloak.ClientId, newKeyCloak.ClientSecret, newKeyCloak.Realm)
 	log.Println("result: ", result)
 
 	if err != nil {
-		return false, "", errors.New(fmt.Sprintf("Invalid or malformed token: %s", err.Error()))
+		return false, "", errors.New("invalid_token")
 	}
 
-	jwt, _, err := newKeyCloak.Gocloak.DecodeAccessToken(context.Background(), token, newKeyCloak.Realm)
-	log.Println("jwt: ", jwt)
-
-	if err != nil {
-		return false, "", errors.New(fmt.Sprintf("Invalid or malformed token: %s", err.Error()))
-
-	}
-
-	jwtToken, _ := json.Marshal(jwt)
-	fmt.Printf("token: %v\n", string(jwtToken))
-
-	// check if the token isn't expired and valid
-	if !*result.Active {
-		return false, "", errors.New("Invalid or expired Token")
-	}
-
-	return true, string(jwtToken), nil
-}
-
-func GetUserInfoFromToken(token string) (*gocloak.UserInfo, error) {
-	// extract Bearer token
-	//token := ExtractBearerToken(accessToken)
+	//jwt, _, err := newKeyCloak.Gocloak.DecodeAccessToken(context.Background(), token, newKeyCloak.Realm)
+	//log.Println("jwt: ", jwt)
 	//
-	//if token == "" {
-	//	return nil, errors.New("Bearer Token missing")
+	//if err != nil {
+	//	log.Println(err)
 	//}
-
-	//// call Keycloak API to verify the access token
-	result, err := newKeyCloak.Gocloak.RetrospectToken(context.Background(), token, newKeyCloak.ClientId, newKeyCloak.ClientSecret, newKeyCloak.Realm)
-	log.Println("result: ", result)
-
-	if err != nil {
-		return nil, errors.New(fmt.Sprintf("Invalid or malformed token: %s", err.Error()))
-	}
-
-	userInfo, err := newKeyCloak.Gocloak.GetUserInfo(context.Background(), token, newKeyCloak.Realm)
-	if err != nil {
-		return nil, err
-	}
-
-	fmt.Println("userInfo: ", userInfo)
+	//
+	//jwtToken, _ := json.Marshal(jwt)
+	//fmt.Printf("jwtToken: %v\n", string(jwtToken))
 
 	// check if the token isn't expired and valid
 	if !*result.Active {
-		return nil, errors.New("Invalid or expired Token")
+		return false, "", errors.New("token_expired")
 	}
 
-	return userInfo, nil
+	return true, token, nil
 }
